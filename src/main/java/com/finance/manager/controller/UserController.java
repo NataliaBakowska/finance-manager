@@ -3,12 +3,7 @@ package com.finance.manager.controller;
 import com.finance.manager.model.User;
 import com.finance.manager.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -17,7 +12,12 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/users")
-    public List<User> all() {
+    public Object all(@RequestParam(required = false) Long id, @RequestParam(required = false) String username) { //todo define return type
+        if (id != null) {
+            return userRepository.findById(id);
+        } else if (username != null) {
+            return userRepository.findByUsername(username);
+        }
         return userRepository.findAll();
     }
 
